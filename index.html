@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>LuckyBear</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{
@@ -35,6 +36,8 @@ header{
   transition:0.25s;
   display:flex;align-items:center;justify-content:center;
 }
+
+/* стеклянная */
 .glass-btn.instruction{
   color:#e9eef6;
   background:rgba(255,255,255,0.08);
@@ -46,6 +49,8 @@ header{
   border-color:rgba(255,255,255,0.35);
   transform:translateY(-3px);
 }
+
+/* синие кнопки сверху */
 .glass-btn.tg{
   color:#fff;
   background:linear-gradient(135deg,#009cff,#0077ff);
@@ -69,7 +74,7 @@ main{
   padding:14vh 16px 10vh;
 }
 
-/* ЛОГОТИП — крупный */
+/* ЛОГО */
 .logo-wrapper{
   display:flex;
   flex-direction:column;
@@ -96,7 +101,7 @@ main{
   object-fit:cover;
 }
 
-/* ТЕКСТ */
+/* TEXT */
 .neon-title{
   font-size:clamp(18px,4vw,24px);
   font-weight:900;
@@ -115,7 +120,7 @@ main{
   margin:0 auto;
 }
 
-/* КНОПКИ */
+/* BUTTONS */
 .btn-container{
   width:100%;max-width:380px;
   margin:30px auto 0;
@@ -131,6 +136,7 @@ main{
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.12);
   transition:.3s;
+  backdrop-filter:blur(8px);
 }
 .glass-block:hover{
   background:rgba(255,255,255,0.12);
@@ -138,7 +144,7 @@ main{
   transform:translateY(-3px);
 }
 
-/* Основная кнопка */
+/* синяя основная (только первая в main) */
 .primary-btn{
   background:linear-gradient(135deg,#008cff,#006aff);
   border:none;
@@ -150,14 +156,12 @@ main{
   gap:10px;
 }
 .primary-btn:hover{filter:brightness(1.1)}
-.tg-icon{
-  width:22px;
-  height:22px;
-}
 
-/* VPN */
+.tg-icon{width:22px;height:22px}
+
+/* предупреждение */
 .vpn-warning{
-  margin:35px auto 10px;
+  margin:35px auto 5px;
   font-size:clamp(13px,2.6vw,14px);
   color:#ffcd66;
   background:rgba(255,255,255,0.05);
@@ -168,14 +172,9 @@ main{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:8px;
+  text-align:center;
   backdrop-filter:blur(8px);
   box-shadow:0 0 12px rgba(255,200,0,0.08);
-  opacity:0.9;
-}
-.vpn-warning:hover{
-  opacity:1;
-  box-shadow:0 0 16px rgba(255,200,0,0.2);
 }
 
 /* FOOTER */
@@ -205,16 +204,16 @@ footer .copyright{
   color:#a9b3c2;
 }
 
-/* МОБИЛКА */
+/* MOBILE */
 @media(max-width:480px){
   main{padding-top:20vh;padding-bottom:12vh;}
   .logo-circle{width:150px;height:150px;}
+  .glass-block{padding:15px 16px;}
   .vpn-warning{margin-top:22px;padding:10px 12px;font-size:13px;}
-  .glass-block,.primary-btn{padding:15px 16px;}
-  footer .footer-badges{gap:8px;}
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -223,6 +222,7 @@ footer .copyright{
 </header>
 
 <main>
+
   <div class="logo-wrapper">
     <div class="logo-circle">
       <img src="lucky.png" alt="Lucky Bear">
@@ -233,6 +233,8 @@ footer .copyright{
   <p class="subtitle">Нажмите «Играть на сайте» — регистрация, бонус и игра!</p>
 
   <div class="btn-container">
+
+    <!-- ПЕРВАЯ — СИНЯЯ -->
     <a class="glass-block primary-btn" href="https://t.me/avionix01">
       <svg class="tg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
         <circle cx="120" cy="120" r="120" fill="#0088cc"/>
@@ -240,14 +242,22 @@ footer .copyright{
       </svg>
       TG канал — акции и розыгрыши
     </a>
+
+    <!-- остальные стеклянные -->
     <a class="glass-block" href="https://lbgame777.xyz/4D2imr">Скачать приложение</a>
     <a class="glass-block" href="https://lbgame777.xyz/3vYyZY">Играть на сайте</a>
     <a class="glass-block" href="https://t.me/Lucky_Bear_SpinPro_Bot/app?startapp=bXN0PTB4MWJlODE2NDg4Jm09SUdPUlImYz1BS1RZVA">Играть в TG</a>
+
   </div>
 
   <div class="vpn-warning">
-    ⚠️ Если игры не открывается — включите VPN для корректной работы.
+    Если игра не открывается — включите VPN
   </div>
+
+  <div class="btn-container" style="margin-top:10px;">
+    <a class="glass-block" href="https://t.me/appavpn_bot?start=6258371389">Включить VPN</a>
+  </div>
+
 </main>
 
 <footer>
@@ -260,6 +270,22 @@ footer .copyright{
   <div class="copyright">© LuckyBear — Все права защищены</div>
 </footer>
 
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104709922', 'ym');
+
+    ym(104709922, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/104709922" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika -->
+
 </body>
 </html>
+
 
