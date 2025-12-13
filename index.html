@@ -6,13 +6,12 @@
 <title>Испытай удачу</title>
 
 <link rel="preload" href="fonts/BenzinBold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="images/preview.png" as="image">
 
 <style>
-@font-face {
-  font-family: "BenzinBold";
-  src: url("fonts/BenzinBold.woff2") format("woff2");
-  font-display: swap;
+@font-face{
+  font-family:"BenzinBold";
+  src:url("fonts/BenzinBold.woff2") format("woff2");
+  font-display:swap;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -25,23 +24,62 @@ body{
   justify-content:center;
   align-items:center;
   color:#fff;
-  overflow-x:hidden;
+  overflow:hidden;
 }
 
-/* ❄️ снег */
+/* ❄️ СНЕГ (ВИДЕН И НА ПРЕЛОАДЕРЕ) */
 .snowflake{
   position:fixed;
   top:-10px;
-  color:rgba(255,255,255,.9);
+  color:rgba(255,255,255,.95);
   pointer-events:none;
   animation:fall linear infinite;
-  z-index:1;
+  z-index:10000;
 }
 @keyframes fall{
   to{transform:translateY(110vh);opacity:0}
 }
 
-/* контент */
+/* ===== PRELOADER ===== */
+#preloader{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at top,#3a7bd5,#1e3c72 60%,#0b1c3a);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  transition:.6s;
+}
+#preloader.hide{
+  opacity:0;
+  pointer-events:none;
+}
+
+.loader-box{
+  text-align:center;
+  font-family:BenzinBold;
+  z-index:5;
+}
+
+.spinner{
+  width:70px;
+  height:70px;
+  border:5px solid rgba(255,255,255,.3);
+  border-top:5px solid #fff;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 20px;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.percent{
+  margin-top:10px;
+  font-size:22px;
+}
+
+/* ===== MAIN ===== */
 .container{
   max-width:480px;
   width:100%;
@@ -63,10 +101,8 @@ video{
   background:#000;
 }
 
-/* кнопки */
 .play-btn{
   margin:25px auto 0;
-  display:block;
   width:100%;
   max-width:320px;
   padding:16px;
@@ -103,7 +139,7 @@ h2{
   text-decoration:none;
 }
 
-/* popup */
+/* ===== POPUP ===== */
 .popup{
   position:fixed;
   inset:0;
@@ -114,28 +150,54 @@ h2{
   opacity:0;
   visibility:hidden;
   transition:.4s;
-  z-index:10;
+  z-index:20;
+  padding:20px;
 }
 .popup.active{
   opacity:1;
   visibility:visible;
 }
+
 .popup-box{
-  background:rgba(255,255,255,.1);
+  background:rgba(255,255,255,.12);
   backdrop-filter:blur(18px);
-  padding:30px;
-  border-radius:20px;
+  padding:18px;
+  border-radius:18px;
   text-align:center;
   max-width:320px;
+  width:100%;
+  max-height:80vh;
+  overflow-y:auto;
+}
+
+.win-amount{
+  color:#ff9f1a;
+  font-weight:900;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:420px){
+  .popup-box{padding:14px}
+  .play-btn{font-size:16px}
 }
 </style>
 </head>
 
 <body>
 
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <p>Загрузка Aviamasters X-Mas…</p>
+    <div class="percent" id="percent">0%</div>
+  </div>
+</div>
+
+<!-- MAIN -->
 <div class="container">
   <div class="video-box">
-    <video id="video" preload="metadata" poster="images/preview.png" playsinline webkit-playsinline muted>
+    <video id="video" poster="images/preview.png" preload="auto" playsinline muted>
       <source src="video/promo.mp4" type="video/mp4">
     </video>
   </div>
@@ -143,39 +205,80 @@ h2{
   <button class="play-btn" id="play">🎄 ИСПЫТАТЬ УДАЧУ</button>
 
   <h2>НАЧНИ ИГРАТЬ</h2>
-  <a href="https://t.me/+MAaJRf-sVCIxOTYy" class="tg-btn" target="_blank">Перейти в Telegram</a>
+  <a href="https://t.me/+MAaJRf-sVCIxOTYy" class="tg-btn" target="_blank">
+    Перейти в Telegram
+  </a>
 </div>
 
+<!-- POPUP -->
 <div class="popup" id="popup">
   <div class="popup-box">
-    <h3>💰 Вы могли выиграть 33 125 ₽!</h3>
+    <h3>
+      💰 Вы могли выиграть
+      <span class="win-amount">33 125 ₽</span>
+    </h3>
     <p>Попробуй прямо сейчас</p>
-    <a href="https://t.me/+MAaJRf-sVCIxOTYy" class="tg-btn" target="_blank">Испытать удачу</a>
+    <a href="https://t.me/+MAaJRf-sVCIxOTYy" class="tg-btn" target="_blank">
+      Испытать удачу
+    </a>
   </div>
 </div>
 
 <script>
-// снег
+/* ❄️ СНЕГ */
 setInterval(()=>{
   const s=document.createElement('div');
   s.className='snowflake';
   s.style.left=Math.random()*100+'vw';
-  s.style.fontSize=10+Math.random()*15+'px';
-  s.style.animationDuration=5+Math.random()*5+'s';
+  s.style.fontSize=10+Math.random()*18+'px';
+  s.style.animationDuration=5+Math.random()*6+'s';
   s.innerHTML='❄';
   document.body.appendChild(s);
-  setTimeout(()=>s.remove(),10000);
-},300);
+  setTimeout(()=>s.remove(),11000);
+},250);
 
-// видео + popup
-const v=document.getElementById('video');
-const b=document.getElementById('play');
-const p=document.getElementById('popup');
+/* PRELOADER */
+const percentEl=document.getElementById('percent');
+const preloader=document.getElementById('preloader');
+const video=document.getElementById('video');
 
-b.onclick=async()=>{
-  b.style.display='none';
-  try{v.muted=false;await v.play()}catch{v.play()}
-  setTimeout(()=>p.classList.add('active'),13000);
+let progress=0, imgReady=false, videoReady=false;
+
+const fake=setInterval(()=>{
+  if(progress<90){
+    progress++;
+    percentEl.textContent=progress+'%';
+  }
+},40);
+
+const img=new Image();
+img.src='images/preview.png';
+img.onload=()=>{imgReady=true;check()};
+
+video.addEventListener('canplaythrough',()=>{
+  videoReady=true;
+  check();
+},{once:true});
+
+function check(){
+  if(imgReady && videoReady){
+    clearInterval(fake);
+    const fin=setInterval(()=>{
+      if(progress<100){
+        progress++;
+        percentEl.textContent=progress+'%';
+      }else{
+        clearInterval(fin);
+        setTimeout(()=>preloader.classList.add('hide'),400);
+      }
+    },20);
+  }
+}
+
+/* VIDEO + POPUP */
+document.getElementById('play').onclick=async()=>{
+  try{video.muted=false;await video.play()}catch{video.play()}
+  setTimeout(()=>document.getElementById('popup').classList.add('active'),13000);
 };
 </script>
 
