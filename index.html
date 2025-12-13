@@ -27,7 +27,7 @@ body{
   overflow:hidden;
 }
 
-/* ❄️ СНЕГ (ВИДЕН И НА ПРЕЛОАДЕРЕ) */
+/* ❄️ СНЕГ */
 .snowflake{
   position:fixed;
   top:-10px;
@@ -59,7 +59,6 @@ body{
 .loader-box{
   text-align:center;
   font-family:BenzinBold;
-  z-index:5;
 }
 
 .spinner{
@@ -71,7 +70,6 @@ body{
   animation:spin 1s linear infinite;
   margin:0 auto 20px;
 }
-
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .percent{
@@ -166,19 +164,11 @@ h2{
   text-align:center;
   max-width:320px;
   width:100%;
-  max-height:80vh;
-  overflow-y:auto;
 }
 
 .win-amount{
   color:#ff9f1a;
   font-weight:900;
-}
-
-/* ===== MOBILE ===== */
-@media(max-width:420px){
-  .popup-box{padding:14px}
-  .play-btn{font-size:16px}
 }
 </style>
 </head>
@@ -197,7 +187,7 @@ h2{
 <!-- MAIN -->
 <div class="container">
   <div class="video-box">
-    <video id="video" poster="images/preview.png" preload="auto" playsinline muted>
+    <video id="video" poster="images/preview.png" preload="metadata" playsinline muted>
       <source src="video/promo.mp4" type="video/mp4">
     </video>
   </div>
@@ -213,10 +203,7 @@ h2{
 <!-- POPUP -->
 <div class="popup" id="popup">
   <div class="popup-box">
-    <h3>
-      💰 Вы могли выиграть
-      <span class="win-amount">33 125 ₽</span>
-    </h3>
+    <h3>💰 Вы могли выиграть <span class="win-amount">33 125 ₽</span></h3>
     <p>Попробуй прямо сейчас</p>
     <a href="https://t.me/+MAaJRf-sVCIxOTYy" class="tg-btn" target="_blank">
       Испытать удачу
@@ -242,59 +229,47 @@ const percentEl=document.getElementById('percent');
 const preloader=document.getElementById('preloader');
 const video=document.getElementById('video');
 
-let progress=0, imgReady=false, videoReady=false;
+let progress=0;
+let done=false;
 
 const fake=setInterval(()=>{
   if(progress<90){
     progress++;
     percentEl.textContent=progress+'%';
   }
-},40);
+},35);
 
-const img=new Image();
-img.src='images/preview.png';
-img.onload=()=>{imgReady=true;check()};
+function finishLoader(){
+  if(done) return;
+  done=true;
+  clearInterval(fake);
 
-video.addEventListener('canplaythrough',()=>{
-  videoReady=true;
-  check();
-},{once:true});
-
-function check(){
-  if(imgReady && videoReady){
-    clearInterval(fake);
-    const fin=setInterval(()=>{
-      if(progress<100){
-        progress++;
-        percentEl.textContent=progress+'%';
-      }else{
-        clearInterval(fin);
-        setTimeout(()=>preloader.classList.add('hide'),400);
-      }
-    },20);
-  }
+  const fin=setInterval(()=>{
+    if(progress<100){
+      progress++;
+      percentEl.textContent=progress+'%';
+    }else{
+      clearInterval(fin);
+      setTimeout(()=>preloader.classList.add('hide'),300);
+    }
+  },15);
 }
+
+video.addEventListener('loadeddata', finishLoader, { once:true });
+setTimeout(finishLoader, 4000);
 
 /* VIDEO + POPUP */
 document.getElementById('play').onclick=async()=>{
-  try{video.muted=false;await video.play()}catch{video.play()}
+  try{
+    video.muted=false;
+    await video.play();
+  }catch{
+    video.play();
+  }
   setTimeout(()=>document.getElementById('popup').classList.add('active'),13000);
 };
 </script>
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104709922', 'ym');
-
-    ym(104709922, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/104709922" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
 </body>
 </html>
+
